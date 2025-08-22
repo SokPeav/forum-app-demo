@@ -8,6 +8,7 @@ export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { signInWithGitHub, signOut, user } = useAuth();
 
+  console.log(user?.user_metadata.avatar_url);
   const displayName = user?.user_metadata.user_name || user?.email;
   return (
     <nav className="fixed top-0 w-full z-40 bg-background backdrop-blur-lg border-b border-white/10 shadow-lg">

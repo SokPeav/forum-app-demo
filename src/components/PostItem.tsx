@@ -2,37 +2,17 @@ import { Link } from "@tanstack/react-router";
 import { MessageCircle } from "lucide-react";
 import { LikeButton } from "./LikeButton";
 import type { Post } from "./PostList";
-import { useCallback, useRef } from "react";
-import { useMousePosition } from "@/hooks/useMousePosition";
 
 interface Props {
   post: Post;
 }
 
 export const PostItem = ({ post }: Props) => {
-  const divRef = useRef<HTMLDivElement>(null);
-  const infoRef = useRef<HTMLDivElement>(null);
-
-  const update = useCallback(({ x, y }: { x: number; y: number }) => {
-    // We need to offset the position to center the info div
-    const offsetX = (infoRef.current?.offsetWidth || 0) / 2;
-    const offsetY = (infoRef.current?.offsetHeight || 0) / 2;
-
-    // Use CSS variables to position the info div instead of state to avoid re-renders
-    infoRef.current?.style.setProperty("--x", `${x - offsetX}px`);
-    infoRef.current?.style.setProperty("--y", `${y - offsetY}px`);
-  }, []);
-
-  useMousePosition(divRef, update);
-
   return (
     <div className="relative group">
       {/* <div className="absolute -inset-1 rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600 blur-sm opacity-0 group-hover:opacity-50 transition duration-300 pointer-events-none"></div> */}
 
-      <div
-        ref={divRef}
-        className="flex-1 h-full  bg-card border  text-card-foreground border-border rounded-3xl  flex-col p-2 overflow-hidden transition-colors duration-300 "
-      >
+      <div className="flex-1 h-full  bg-card border  text-card-foreground border-border rounded-3xl  flex-col p-2 overflow-hidden transition-colors duration-300 ">
         <Link
           to={`/post/$postId`}
           params={{ postId: post.id.toString() }}
@@ -78,16 +58,6 @@ export const PostItem = ({ post }: Props) => {
             <span>{post.comment_count ?? 0}</span>
           </Link>
         </div>
-      </div>
-
-      <div
-        ref={infoRef}
-        style={{
-          transform: "translate(var(--x), var(--y))",
-        }}
-        className="pointer-events-none absolute left-0 top-0 z-50 rounded-full bg-blue-800/80 px-4 py-2 text-sm font-bold text-white opacity-0 duration-0 group-hover:opacity-100"
-      >
-        View Detail &rarr;
       </div>
     </div>
   );

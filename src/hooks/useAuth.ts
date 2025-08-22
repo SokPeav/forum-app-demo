@@ -5,6 +5,7 @@ import supabase from "../lib/supabase";
 interface AuthContextType {
   user: User | null;
   signInWithGitHub: () => void;
+  signInWithGoogle: () => void;
   signOut: () => void;
 }
 
@@ -27,6 +28,9 @@ export const useAuth = (): AuthContextType => {
   const signInWithGitHub = () => {
     supabase.auth.signInWithOAuth({ provider: "github" });
   };
+  const signInWithGoogle = () => {
+    supabase.auth.signInWithOAuth({ provider: "google" });
+  };
 
   const signOut = () => {
     supabase.auth.signOut();
@@ -35,6 +39,7 @@ export const useAuth = (): AuthContextType => {
   return {
     user,
     signInWithGitHub,
+    signInWithGoogle,
     signOut,
   };
 };

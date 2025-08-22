@@ -2,8 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import supabase from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+import { formatDistanceToNow } from "date-fns";
 import {
   Heart,
   MessageCircle,
@@ -12,7 +11,6 @@ import {
   PlusIcon,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-dayjs.extend(relativeTime);
 
 interface Comment {
   id: number;
@@ -157,7 +155,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
               </span>
               <span className="text-gray-500 dark:text-gray-400 text-xs">
                 <span className="mr-2 text-[0.7rem] text-muted-foreground">
-                  {dayjs(comment.created_at).fromNow(true)}
+                  {formatDistanceToNow(new Date(comment.created_at), {
+                    addSuffix: false,
+                  })}
                 </span>
               </span>
             </div>

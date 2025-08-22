@@ -5,12 +5,14 @@ import { useState, type ChangeEvent } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { fetchCommunities, type Community } from "./CommunityList";
+import { redirect } from "@tanstack/react-router";
 
 interface PostInput {
   title: string;
   content: string;
   avatar_url: string | null;
   community_id?: number | null;
+  op: string;
 }
 
 const createPost = async (post: PostInput, imageFile: File) => {
@@ -58,6 +60,13 @@ export const CreatePost = () => {
     mutationFn: (data: { post: PostInput; imageFile: File }) => {
       return createPost(data.post, data.imageFile);
     },
+
+    onSuccess: () => {
+      redirect({
+        to: "/",
+        throw: true,
+      });
+    },
   });
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -68,6 +77,7 @@ export const CreatePost = () => {
         title,
         content,
         avatar_url: user?.user_metadata.avatar_url || null,
+        op: user?.user_metadata.user_name,
         community_id: communityId,
       },
       imageFile: selectedFile,
