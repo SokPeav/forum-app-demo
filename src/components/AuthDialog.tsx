@@ -1,33 +1,17 @@
-// components/AuthDialog.tsx
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useSignInDialogStore } from "@/hooks/useSignInDialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Github, Mail, Chrome, Eye, EyeOff, Lock, User } from "lucide-react";
+import { CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/useAuth";
+import { useSignInDialogStore } from "@/hooks/useSignInDialog";
+import { Chrome, Github } from "lucide-react";
 
 export function AuthDialog() {
   const { isOpen, closeDialog } = useSignInDialogStore();
-  const { signInWithGitHub, signOut, user, signInWithGoogle } = useAuth();
+  const { signInWithGitHub, signInWithGoogle } = useAuth();
   return (
     <Dialog open={isOpen} onOpenChange={closeDialog}>
       <DialogContent>
-        {/* "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm", */}
-        <div className="w-full text-card-foreground flex flex-col py-6  gap-6  max-w-md shadow-2xl   backdrop-blur-sm">
+        <div className="w-full text-card-foreground flex flex-col py-6  gap-6  max-w-md   ">
           <div className="space-y-4 text-center">
             <div className="space-y-2">
               <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -47,7 +31,7 @@ export function AuthDialog() {
                 variant="outline"
                 className="w-full gap-3 h-12 border-2 hover:border-blue-300"
               >
-                <Chrome className="h-5 w-5 text-blue-500" />
+                <Chrome className="h-5 w-5 " />
                 Continue with Google
               </Button>
               <Button
@@ -59,7 +43,7 @@ export function AuthDialog() {
                 Continue with GitHub
               </Button>
             </div>
-
+            {/* 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
@@ -69,9 +53,9 @@ export function AuthDialog() {
                   Or continue with email
                 </span>
               </div>
-            </div>
+            </div> */}
 
-            <div className="text-center space-y-2">
+            {/* <div className="text-center space-y-2">
               <Button variant="link" className="text-sm text-muted-foreground">
                 Forgot your password?
               </Button>
@@ -84,7 +68,7 @@ export function AuthDialog() {
                   Create an account
                 </Button>
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </div>
       </DialogContent>

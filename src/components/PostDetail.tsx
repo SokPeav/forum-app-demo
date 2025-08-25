@@ -1,12 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-// import { CommentSection } from "./CommentSection";
-import type { Post } from "./PostList";
 import supabase from "@/lib/supabase";
-import { LikeButton } from "./LikeButton";
-import { CommentSection } from "./CommentSection";
-import { CommentSections } from "./comment-section/CommentSection";
-import dayjs from "dayjs";
+import { cn, formatMonthDay } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
+import { LikeButton } from "./LikeButton";
+import type { Post } from "./PostList";
+import { CommentSections } from "./comment-section/CommentSection";
 
 interface Props {
   postId: number;
@@ -39,48 +37,64 @@ export const PostDetail = ({ postId }: Props) => {
   }
   // const displayName = data?.user_metadata.user_name || data?.email;
 
-  console.log(data);
   return (
-    <div className="space-y-6">
-      {/* <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-        {data?.title}
-      </h2> */}
-      <div className="flex flex-row gap-2 items-center ">
-        <img
-          src={data?.avatar_url}
-          alt="User Avatar"
-          className="w-9 h-9 rounded object-cover"
-        />
-        <div className="flex items-center shrink ">
-          <h1>{data?.op} </h1>
-          <span className="mx-1">.</span>
-          <p className="text-gray-500 text-sm ">
-            {formatDistanceToNow(new Date(data!.created_at), {
-              addSuffix: false,
-            })}
-          </p>
-        </div>
-      </div>
-      <h1 className="text-neutral-content-strong m-0 font-semibold text-18 xs:text-24  mb-xs px-md xs:px-0 xs:mb-md  overflow-hidden">
-        {data?.title}
-      </h1>
-      {data?.image_url && (
-        <figure className="h-full w-full m-0 z-10 flex items-center">
-          <img
-            src={data.image_url}
-            alt={data?.title}
-            className="media-lightbox-img h-full  max-h-[100vw] object-contain mb-0 relative"
-            sizes="(min-width: 1415px) 750px, (min-width: 768px) 50vw, 100vw"
-          />
-        </figure>
+    <div
+      id="content"
+      className={cn(
+        "ml-auto w-full max-w-full",
+        "peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]",
+        "peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]",
+        "sm:transition-[width] sm:duration-200 sm:ease-linear",
+        "flex h-svh flex-col",
+        "group-data-[scroll-locked=1]/body:h-full",
+        "has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh"
       )}
-      <p className="text-gray-400">{data?.content}</p>
-      {/* <p className="text-gray-500 text-sm">
+    >
+      <main className="flex flex-col items-center ">
+        <div className="max-w-2xl">
+          <h1 className=" text-4xl font-bold mb-6   text-left tracking-tight md:text-3xl">
+            {data?.title}
+          </h1>
+          <div className="flex flex-row gap-2 items-center">
+            <img
+              src={data?.avatar_url}
+              alt="User Avatar"
+              className="w-9 h-9 rounded"
+            />
+            <div className="flex flex-col ">
+              <div className="flex flex-row  gap-1 items-center shrink">
+                <h1>{data?.op} </h1>
+                <span className="mx-1">•</span>
+                <p className="text-gray-500 text-sm ">
+                  {formatMonthDay(data?.created_at)}
+                </p>
+              </div>
+              <p className="text-gray-500 text-sm ">
+                {formatDistanceToNow(new Date(data!.created_at), {
+                  addSuffix: false,
+                })}
+              </p>
+            </div>
+          </div>
+
+          <div className="py-5">
+            {data?.image_url && (
+              <img
+                src={data.image_url}
+                alt={data?.title}
+                className=" w-full object-cover rounded "
+              />
+            )}
+          </div>
+          <p>{data?.content}</p>
+          {/* <p className="text-gray-500 text-sm">
         Posted on: {new Date(data!?.created_at).toLocaleDateString()}
       </p> */}
-      <LikeButton postId={postId} className="bg-gray-800" />
-      {/* <CommentSection postId={postId} /> */}
-      <CommentSections postId={postId} />
+          <LikeButton postId={postId} className="bg-ring" />
+          {/* <CommentSection postId={postId} /> */}
+          <CommentSections postId={postId} />
+        </div>
+      </main>
     </div>
   );
 };

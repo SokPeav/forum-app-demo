@@ -11,7 +11,7 @@ export default function LogoTitle({ className }: LogoTitleProps) {
       )}
     >
       <Link to="/" className="font-mono text-xl font-bold ">
-        joke<span className="text-purple-500">.app</span>
+        forum<span className="text-purple-500">.app</span>
       </Link>
     </div>
   );

@@ -1,135 +1,102 @@
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { Link, useLocation } from "@tanstack/react-router";
+import { MenuIcon } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
-import { ThemeSwitch } from "./theme-switch";
 import LogoTitle from "./LogoTitle";
-
+import { ProfileDropdown } from "./profile-dropdown";
+import { ThemeSwitch } from "./theme-switch";
+import { Button, buttonVariants } from "./ui/button";
 export const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { signInWithGitHub, signOut, user } = useAuth();
+  const { user } = useAuth();
 
-  console.log(user?.user_metadata.avatar_url);
-  const displayName = user?.user_metadata.user_name || user?.email;
+  const { pathname } = useLocation();
+
   return (
     <nav className="fixed top-0 w-full z-40 bg-background backdrop-blur-lg border-b border-white/10 shadow-lg">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* <Link to="/" className="font-mono text-xl font-bold ">
-            joke<span className="text-purple-500">.app</span>
-          </Link> */}
-          <LogoTitle className="hover:bg-blue-400 hover:border-blue-400 " />
+          <LogoTitle className="hover:bg-blue-400 hover:border-blue-400 mr-4 " />
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="  transition-colors">
-              Home
-            </Link>
-            <Link to="/create" className="  transition-colors">
-              Create Post
-            </Link>
-            <Link to="/communities" className="  transition-colors">
-              Communities
-            </Link>
-            <Link to="/community/create" className="  transition-colors">
-              Create Community
-            </Link>
-          </div>
+          <nav className="hidden md:flex items-center space-x-2">
+            {topNavLink.map(({ title, href, disabled }) => (
+              <Link
+                key={`${title}-${href}`}
+                to={href}
+                disabled={disabled}
+                className={cn(
+                  `hover:text-primary text-sm font-medium transition-colors ${pathname === href ? "bg-muted hover:bg-muted" : "hover:bg-transparent "}`,
+                  buttonVariants({ variant: "ghost" })
+                )}
+              >
+                {title}
+              </Link>
+            ))}
+          </nav>
 
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center">
-            {user ? (
-              <div className="flex items-center space-x-4">
-                {user.user_metadata?.avatar_url && (
-                  <img
-                    src={user.user_metadata.avatar_url}
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                )}
-                <h1>{displayName}</h1>
-                <button
-                  onClick={signOut}
-                  className="bg-red-500 px-3 py-1 rounded"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={signInWithGitHub}
-                className="bg-blue-500 px-3 py-1 rounded"
-              >
-                Sign in with GitHub
-              </button>
-            )}
+          <div className="ml-auto flex items-center space-x-4">
             <ThemeSwitch />
+            {user && <ProfileDropdown user={user} />}
           </div>
+
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMenuOpen((prev) => !prev)}
-              className="text-gray-300 focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {menuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+          <div className="p-1 md:hidden">
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="outline">
+                  <MenuIcon />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="bottom" align="start">
+                {topNavLink.map(({ title, href, disabled }) => (
+                  <DropdownMenuItem key={`${title}-${href}`} asChild>
+                    <Link
+                      to={href}
+                      className={`${pathname === href ? "bg-muted hover:bg-muted" : "hover:bg-transparent "}`}
+                      disabled={disabled}
+                    >
+                      {title}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-[rgba(10,10,10,0.9)]">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              to="/"
-              className="block px-3 py-2 rounded-md text-base font-medium "
-            >
-              Home
-            </Link>
-            <Link
-              to="/create"
-              className="block px-3 py-2 rounded-md text-base font-medium "
-            >
-              Create Post
-            </Link>
-            <Link
-              to="/communities"
-              className="block px-3 py-2 rounded-md text-base font-medium "
-            >
-              Communities
-            </Link>
-            <Link
-              to="/community/create"
-              className="block px-3 py-2 rounded-md text-base font-medium "
-            >
-              Create Community
-            </Link>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
+const topNavLink = [
+  {
+    title: "Home",
+    href: "/",
+    isActive: false,
+    disabled: false,
+  },
+  {
+    title: " Create Post",
+    href: "/create",
+    isActive: false,
+    disabled: false,
+  },
+  {
+    title: "Communities",
+    href: "/communities",
+    isActive: false,
+    disabled: false,
+  },
+  {
+    title: "  Create Community",
+    href: "/community/create",
+    isActive: false,
+    disabled: false,
+  },
+];

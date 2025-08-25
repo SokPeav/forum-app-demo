@@ -1,15 +1,10 @@
 import { useAuth } from "@/hooks/useAuth";
 import supabase from "@/lib/supabase";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
-import {
-  Heart,
-  MessageCircle,
-  MinusIcon,
-  MoreHorizontal,
-  PlusIcon,
-} from "lucide-react";
+import { Heart, MessageCircle } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 interface Comment {
@@ -76,7 +71,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   postId,
 }) => {
   const [replyText, setReplyText] = useState<string>("");
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, /* setCollapsed */] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [childPositions, setChildPositions] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -102,7 +97,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     setChildPositions(positions ?? []);
   }, [comment, collapsed, showReplyForm, hasChildren /* childPositions */]);
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (replyContent: string) =>
       createReply(
         replyContent,
@@ -135,14 +130,22 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <div className="flex flex-1">
           {/* Avatar */}
           <div id={`avatar-${comment.id}`} className="flex-shrink-0 mr-3">
-            <img
+            {/* <img
               src={comment.avatar_url}
               alt={`${comment.author}'s avatar`}
               className={cn(
                 "w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-gray-800 shadow-sm relative z-20",
                 collapsed && "opacity-0"
               )}
-            />
+            /> */}
+
+            <Avatar className="w-8 h-8  ring-2 ring-white dark:ring-gray-800 shadow-sm relative z-20">
+              <AvatarImage
+                src={comment.avatar_url}
+                alt={`${comment.author}'s avatar`}
+              />
+              <AvatarFallback>{getInitials(comment.author)}</AvatarFallback>
+            </Avatar>
           </div>
 
           <div className="flex-1 min-w-0 items-center justify-center align-middle">
@@ -185,10 +188,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
                   >
                     <MessageCircle size={14} />
                     <span>Reply</span>
-                  </button>
-
-                  <button className="flex items-center space-x-1 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-                    <MoreHorizontal size={14} />
                   </button>
                 </div>
 

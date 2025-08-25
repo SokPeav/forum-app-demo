@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PostItem } from "./PostItem";
 import type { Post } from "./PostList";
 import supabase from "@/lib/supabase";
+import { Spinner } from "./Spinner";
 
 interface Props {
   communityId: number;
@@ -32,15 +33,13 @@ export const CommunityDisplay = ({ communityId }: Props) => {
     queryFn: () => fetchCommunityPost(communityId),
   });
 
-  if (isLoading)
-    return <div className="text-center py-4">Loading communities...</div>;
+  if (isLoading) return <Spinner />;
   if (error)
     return (
       <div className="text-center text-red-500 py-4">
         Error: {error.message}
       </div>
-        );
-    console.log(data)
+    );
   return (
     <div>
       <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">

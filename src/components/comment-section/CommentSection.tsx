@@ -1,23 +1,11 @@
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import supabase from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
-import CommentItem from "./CommentItem";
-import { Button } from "../ui/button";
-import type { User } from "@supabase/supabase-js";
-import {
-  TreeExpander,
-  TreeIcon,
-  TreeLabel,
-  TreeNode,
-  TreeNodeContent,
-  TreeNodeTrigger,
-  TreeProvider,
-  TreeView,
-} from "@/components/ui/kibo-ui/tree";
-import { FileCode, FileJson, FileText, FileType } from "lucide-react";
-import { CommentTree } from "./CommentTree";
 import { useSignInDialogStore } from "@/hooks/useSignInDialog";
+import supabase from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { Button } from "../ui/button";
+import CommentItem from "./CommentItem";
 
 interface Props {
   postId: number;
@@ -172,7 +160,7 @@ export const CommentSections = ({ postId }: Props) => {
 
   console.log(commentTrees);
   return (
-    <div className="mt-6">
+    <div className="mt-2">
       <h3 className="text-2xl font-semibold mb-4">Comments</h3>
       {/* Create Comment Section */}
       {!expanded ? (
@@ -216,12 +204,12 @@ export const CommentSections = ({ postId }: Props) => {
       {/* Comments Display Section */}
       {commentTrees.length > 0 ? (
         <div className="space-y-2">
-          {commentTrees.map((comment, key) => (
+          {commentTrees.map((comment) => (
             <CommentItem key={comment.id} comment={comment} postId={postId} />
           ))}
         </div>
       ) : (
-        <div className="space-y-4 text-center mx-auto mt-20">
+        <div className="space-y-4 text-center mx-auto mt-10">
           <div className="">
             <img
               src="https://64.media.tumblr.com/805cea96d6e15b50db78b1f45133a72e/1b0039bb91761b56-3e/s2048x3072/cc6a49530dee6c29a78766f54104c9dc4f2e5d9b.jpg"

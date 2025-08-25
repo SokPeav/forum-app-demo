@@ -26,12 +26,20 @@ export const useAuth = (): AuthContextType => {
   }, []);
 
   const signInWithGitHub = () => {
-    supabase.auth.signInWithOAuth({ provider: "github" });
-  };
-  const signInWithGoogle = () => {
-    supabase.auth.signInWithOAuth({ provider: "google" });
+    const redirectTo = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+    supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: { redirectTo },
+    });
   };
 
+  const signInWithGoogle = () => {
+    const redirectTo = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+    supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo },
+    });
+  };
   const signOut = () => {
     supabase.auth.signOut();
   };

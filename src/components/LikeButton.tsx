@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import { useSignInDialogStore } from "@/hooks/useSignInDialog";
 import supabase from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -59,9 +60,9 @@ const fetchVotes = async (postId: number): Promise<Vote[]> => {
   return data as Vote[];
 };
 
-export const LikeButton = ({ postId ,className}: Props) => {
+export const LikeButton = ({ postId, className }: Props) => {
   const { user } = useAuth();
-
+  const { openDialog } = useSignInDialogStore();
   const queryClient = useQueryClient();
 
   const {
@@ -76,7 +77,10 @@ export const LikeButton = ({ postId ,className}: Props) => {
 
   const { mutate } = useMutation({
     mutationFn: (voteValue: number) => {
-      if (!user) throw new Error("You must be logged in to Vote!");
+      if (!user) {
+        openDialog();
+        return Promise.reject(new Error("User not logged in"));
+      }
       return vote(voteValue, postId, user.id);
     },
 
@@ -101,10 +105,10 @@ export const LikeButton = ({ postId ,className}: Props) => {
 
   return (
     <div className="flex items-center space-x-4 my-4">
-      <div className={cn("flex items-center  rounded-2xl gap-1 ",className)}>
+      <div className={cn("flex items-center  rounded-2xl gap-1 ", className)}>
         <button
-          className={`p-2 rounded-full   hover:text-red-500 hover:bg-gray-800`}
-          onClick={(e) => mutate(1)}
+          className={`p-2 rounded-full    hover:text-red-500 hover:bg-gray-800`}
+          onClick={() => mutate(1)}
         >
           <ArrowBigUp
             className={`w-5 h-5  ${userVote === 1 && " text-red-500 "}`}

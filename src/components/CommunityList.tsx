@@ -1,4 +1,5 @@
 import supabase from "@/lib/supabase";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
@@ -33,26 +34,33 @@ export const CommunityList = () => {
       </div>
     );
 
-    console.log(data)
   return (
-    <div className="max-w-5xl mx-auto space-y-4">
+    <figure
+      className={cn(
+        "relative flex h-[500px]max-w-5xl mx-auto  flex-col overflow-hidden p-2 space-y-4 "
+      )}
+    >
       {data?.map((community) => (
-        <div
+        <Link
+          to={`/community/$communityId`}
+          params={{
+            communityId: community.id.toString(),
+          }}
           key={community.id}
-          className="border border-white/10 p-4 rounded hover:-translate-y-1 transition transform"
+          className={cn(
+            "relative mx-auto min-h-fit w-full max-w-[800px] cursor-pointer overflow-hidden rounded-2xl p-4",
+            "transition-all duration-200 ease-in-out hover:scale-[103%]",
+            "transform-gpu dark:bg-transparent dark:backdrop-blur-md dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]"
+          )}
         >
-          <Link
-            to={`/community/$communityId`}
-            params={{
-              communityId: community.id.toString(),
-            }}
-            className="text-2xl font-bold text-purple-500 hover:underline"
-          >
-            {community.name}
-          </Link>
-          <p className="text-gray-400 mt-2">{community.description}</p>
-        </div>
+          <div className="flex flex-col gap-3">
+            <figcaption className="flex flex-row items-center text-lg font-medium  ">
+              <span className="text-sm sm:text-lg"> {community.name}</span>
+            </figcaption>
+            <span className="text-gray-400 mt-2">{community.description}</span>
+          </div>
+        </Link>
       ))}
-    </div>
+    </figure>
   );
 };

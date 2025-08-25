@@ -1,3 +1,4 @@
+import { formatMonthDay, formatReadTime } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { MessageCircle } from "lucide-react";
 import { LikeButton } from "./LikeButton";
@@ -29,19 +30,24 @@ export const PostItem = ({ post }: Props) => {
             ) : (
               <div className="w-9 h-9 rounded-full bg-gradient-to-tl from-[#8A2BE2] to-[#491F70]" />
             )}
-            <div className="flex my-1 flex-1">
+            <div className=" my-2 flex-1">
               <span className="text-[20px] leading-[22px] font-semibold mt-2">
                 {post.title}
               </span>
             </div>
-          </div>
 
+            <div className="flex text-muted-foreground text-xs">
+              <p>{formatMonthDay(post.created_at)}</p>
+              <span className="mx-1">•</span>
+              <p>{formatReadTime(post.content)}</p>
+            </div>
+          </div>
           {/* Image */}
           <div className="pointer-events-none relative flex-1 ">
             <img
               src={post.image_url}
               alt={post.title}
-              className="w-full   mt-2 rounded-lg object-contain"
+              className="w-full h-[300px] mt-2 rounded-lg object-cover"
             />
           </div>
         </Link>

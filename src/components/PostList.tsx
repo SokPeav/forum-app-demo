@@ -1,6 +1,7 @@
 import supabase from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { PostItem } from "./PostItem";
+import { Spinner } from "./Spinner";
 
 export interface Post {
   id: number;
@@ -28,7 +29,7 @@ export const PostList = () => {
   });
 
   if (isLoading) {
-    return <div> Loading posts...</div>;
+    return <Spinner />;
   }
 
   if (error) {
@@ -36,7 +37,7 @@ export const PostList = () => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {/* <div className="flex flex-wrap gap-6 justify-center"> */}
       {data?.map((post) => (
         <PostItem post={post} key={post.id} />

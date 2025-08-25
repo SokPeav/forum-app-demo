@@ -1,14 +1,13 @@
 import {
-  TreeProvider,
-  TreeView,
-  TreeNode,
-  TreeNodeTrigger,
-  TreeNodeContent,
   TreeExpander,
   TreeIcon,
   TreeLabel,
+  TreeNode,
+  TreeNodeContent,
+  TreeNodeTrigger,
+  TreeProvider,
+  TreeView,
 } from "@/components/ui/kibo-ui/tree"; // adjust path
-import dayjs from "dayjs";
 
 interface Comment {
   id: number;
@@ -50,7 +49,7 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments }) => {
         <TreeLabel>
           <span className="font-medium">{comment.author}</span>{" "}
           <span className="text-xs text-gray-500">
-            {dayjs(comment.created_at).fromNow()}
+            {/* {dayjs(comment.created_at)} */}
           </span>
           <div className="text-sm text-gray-700 dark:text-gray-300">
             {comment.content}
